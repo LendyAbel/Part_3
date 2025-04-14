@@ -1,0 +1,25 @@
+# fly.toml app configuration file generated for part3-white-lake-8525 on 2025-04-13T17:46:19+02:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'part3-white-lake-8525'
+primary_region = 'gru'
+
+[build]
+
+[env]
+PORT = "3001"
+
+[http_service]
+  internal_port = 3001
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
