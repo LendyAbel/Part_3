@@ -78,11 +78,7 @@ app.delete('/api/persons/:id', (request, response) => {
   response.status(204).end(`Person with id ${id} deleted`)
 })
 
-const idGenerator = () => {
-  const id = Math.round(Math.random() * 1000)
-  console.log(id)
-  return id
-}
+
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
@@ -99,15 +95,18 @@ app.post('/api/persons', (request, response) => {
 
   console.log('body', body)
 
-  const person = {
-    name: body.name,
-    number: body.number,
-    id: idGenerator(),
-  }
+  const person = new Person(
+    {
+      name: body.name,
+      number: body.number,
+    }
+  ) 
 
-  persons = persons.concat(person)
+  person.save().then(person=>{
+    console.log('Saved ',person)
+    response.json(body)
+  })
 
-  response.json(body)
 })
 
 const PORT = process.env.PORT
