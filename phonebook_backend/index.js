@@ -61,7 +61,7 @@ app.get('/api/persons', (request, response, next) => {
     })
 })
 
-app.get('/info', (request, response) => {
+app.get('/info', (request, response, next) => {
   const date = new Date()
 
   const html = `
@@ -73,14 +73,16 @@ app.get('/info', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const person = persons.find(pers => pers.id === id)
-
-  if (!person) {
-    return response.status(404).end(`Person with id ${id} not found`)
-  }
-
-  response.json(person)
+  Person.findById(request.params.id)
+    .then(person => {
+      if (!person) {
+        return response.status(404).end(`Person with id ${id} not found`)
+      }
+      response.json(person)
+    })
+    .catch(error => {
+      next(error)
+    })
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
