@@ -73,7 +73,7 @@ const App = () => {
 
     if (existingPerson) {
       newPerson.id = existingPerson.id
-      if (isNumberRepeated(newPerson, existingPerson)) {
+      if (newPerson.number === existingPerson.number) {
         return alert(`${newName} with number ${newNumber} is already added`)
       }
       if (
@@ -81,6 +81,7 @@ const App = () => {
           `${newName} is already added with number ${existingPerson.number}. Replace old number?`
         )
       ) {
+        console.log("antes de solicitar el PUT",newPerson)
         replaceContact(newPerson)
       }
       return
