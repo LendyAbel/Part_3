@@ -5,6 +5,14 @@ const morgan = require('morgan')
 const app = express()
 const Person = require('./models/person')
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  }
+  next(error)
+}
+
 app.use(express.json())
 app.use(express.static('dist'))
 app.use(cors())
@@ -43,10 +51,14 @@ let persons = [
   },
 ]
 
-app.get('/api/persons', (request, response) => {
-  Person.find({}).then(persons => {
-    response.json(persons)
-  })
+app.get('/api/persons', (request, response, next) => {
+  Person.find({})
+    .then(persons => {
+      response.json(persons)
+    })
+    .catch(error => {
+      next(error)
+    })
 })
 
 app.get('/info', (request, response) => {
@@ -71,14 +83,18 @@ app.get('/api/persons/:id', (request, response) => {
   response.json(person)
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-  const id =request.params.id
-  Person.findByIdAndDelete(id).then(result => {
-    response.status(204).end(`Person with id ${id} deleted`)
-  })
+app.delete('/api/persons/:id', (request, response, next) => {
+  const id = request.params.id
+  Person.findByIdAndDelete(id)
+    .then(result => {
+      response.status(204).end(`Person with id ${id} deleted`)
+    })
+    .catch(error => {
+      next(error)
+    })
 })
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', (request, response, next) => {
   const body = request.body
 
   if (!body) {
@@ -99,12 +115,18 @@ app.post('/api/persons', (request, response) => {
     number: body.number,
   })
 
-  person.save().then(person => {
-    console.log('Saved ', person)
-    response.json(person)
-  })
+  person
+    .save()
+    .then(person => {
+      console.log('Saved ', person)
+      response.json(person)
+    })
+    .catch(error => {
+      next(error)
+    })
 })
 
+app.use(errorHandler)
 const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
