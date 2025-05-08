@@ -2,7 +2,6 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
-
 const app = express()
 const Person = require('./models/person')
 
@@ -73,11 +72,11 @@ app.get('/api/persons/:id', (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  persons = persons.filter(pers => pers.id != id)
-  response.status(204).end(`Person with id ${id} deleted`)
+  const id =request.params.id
+  Person.findByIdAndDelete(id).then(result => {
+    response.status(204).end(`Person with id ${id} deleted`)
+  })
 })
-
 
 app.post('/api/persons', (request, response) => {
   const body = request.body
@@ -95,18 +94,15 @@ app.post('/api/persons', (request, response) => {
 
   console.log('body', body)
 
-  const person = new Person(
-    {
-      name: body.name,
-      number: body.number,
-    }
-  ) 
-
-  person.save().then(person=>{
-    console.log('Saved ',person)
-    response.json(body)
+  const person = new Person({
+    name: body.name,
+    number: body.number,
   })
 
+  person.save().then(person => {
+    console.log('Saved ', person)
+    response.json(person)
+  })
 })
 
 const PORT = process.env.PORT
