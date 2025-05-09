@@ -1,9 +1,9 @@
-@id = 681db6d4fa85619e1acde65e
+@id = 681e094a4d3be3f773c3aadf
 
 PUT http://localhost:3001/api/persons/{{id}}
 Content-Type: application/json
 
 {
-    "name": "Lendy Snachez",
+    "name": "pppp",
     "number": "034-622492312"
 }

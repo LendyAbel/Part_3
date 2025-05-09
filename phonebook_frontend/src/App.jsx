@@ -6,9 +6,6 @@ import AddContactForm from './components/AddContactForm'
 import ShowNumbers from './components/ShowNumbers'
 import Notification from './components/Notification'
 
-const isNumberRepeated = (newPerson, olderPerson) =>
-  newPerson.number === olderPerson.number
-
 const App = () => {
   // console.log('-------------------------')
   const [persons, setPersons] = useState([])
@@ -61,6 +58,8 @@ const App = () => {
       setPersons(persons.concat(newPerson))
       resetFrom()
       setMessageTo(`Added ${newPerson.name}`, false)
+    }).catch(error=>{
+      setMessageTo(error.response.data.error, true)
     })
   }
 
@@ -93,19 +92,17 @@ const App = () => {
 
     const deletedContactId = e.target.id
     const personToDelete = persons.find(person => person.id === e.target.id)
-    // console.log(e.target.id)
-    // console.log(personToDelete)
 
     if (window.confirm(`Delete ${personToDelete.name}?`)) {
       contacts
         .deleteContact(deletedContactId)
         .then(() => {
-          // console.log("ok");
           setPersons(persons.filter(person => person.id != deletedContactId))
           setMessageTo(`Deleted ${personToDelete.name}`, false)
         })
         .catch(error => {
           setPersons(persons.filter(p => p.id != personToDelete.id))
+          console.log(error); 
         })
     }
   }
