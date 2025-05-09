@@ -30,6 +30,10 @@ morgan.token('body', request => {
   return body
 })
 
+app.get('/', (request, response) => {
+  response.send('/dist/index.html')
+})
+
 app.get('/api/persons', (request, response, next) => {
   Person.find({})
     .then(persons => {
