@@ -19,17 +19,7 @@ const deleteContact = id => {
 }
 
 const replaceContact = replacePerson => {
-
-  // console.log('replacePerson: ', replacePerson)
-
-  const request = axios
-    .put(`${baseUrl}/${replacePerson.id}`, replacePerson)
-    .catch(error => {
-      console.log(error)
-    })
-
-  // console.log(request)
-
+  const request = axios.put(`${baseUrl}/${replacePerson.id}`, replacePerson)
   return request.then(response => response.data)
 }
 

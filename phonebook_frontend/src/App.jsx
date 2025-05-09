@@ -45,11 +45,16 @@ const App = () => {
         )
       })
       .catch(error => {
-        setMessageTo(
-          `Information of ${newPerson.name} has already been removed from server`,
-          true
-        )
-        setPersons(persons.filter(p => p.id != newPerson.id))
+        console.log(error);
+        if (error.response && error.response.status === 400 ){
+          setMessageTo(error.response.data.error, true)
+        } else {
+          setMessageTo(
+            `Information of ${newPerson.name} has already been removed from server`,
+            true
+          )
+          setPersons(persons.filter(p => p.id != newPerson.id))
+        }
       })
   }
 
