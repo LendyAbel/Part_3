@@ -81,7 +81,6 @@ const App = () => {
           `${newName} is already added with number ${existingPerson.number}. Replace old number?`
         )
       ) {
-        console.log("antes de solicitar el PUT",newPerson)
         replaceContact(newPerson)
       }
       return

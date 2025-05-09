@@ -21,7 +21,6 @@ const deleteContact = id => {
 }
 
 const replaceContact = replacePerson => {
-  console.log('aqui: ', replacePerson)
 
   // console.log('replacePerson: ', replacePerson)
 
