@@ -73,7 +73,7 @@ const App = () => {
 
     if (existingPerson) {
       newPerson.id = existingPerson.id
-      if (isNumberRepeated(newPerson, existingPerson)) {
+      if (newPerson.number === existingPerson.number) {
         return alert(`${newName} with number ${newNumber} is already added`)
       }
       if (
